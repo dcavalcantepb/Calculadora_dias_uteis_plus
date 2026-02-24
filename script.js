@@ -1,3 +1,7 @@
+// ============================
+// CALCULADORA DE DIAS ÚTEIS
+// ============================
+
 // ---------------------------
 // Função para calcular dias úteis entre duas datas
 function calcularDiasUteisEntreDatas() {
@@ -19,22 +23,25 @@ function calcularDiasUteisEntreDatas() {
     }
 
     let dataAtual = new Date(inicio);
-
-    if (!contarInicio) {
-        dataAtual.setDate(dataAtual.getDate() + 1);
-    }
+    if (!contarInicio) dataAtual.setDate(dataAtual.getDate() + 1);
 
     let diasUteis = 0;
 
     function ehFeriado(data) {
-        const dd = String(data.getDate()).padStart(2, "0");
-        const mm = String(data.getMonth() + 1).padStart(2, "0");
+        const dd = String(data.getDate()).padStart(2,"0");
+        const mm = String(data.getMonth()+1).padStart(2,"0");
         const yyyy = data.getFullYear();
         const formato = `${dd}-${mm}-${yyyy}`;
         return FERIADOS.includes(formato);
     }
 
     while (dataAtual <= fim) {
+        // adiciona feriados do ano atual se necessário
+        const anoAtualLoop = dataAtual.getFullYear();
+        if (!FERIADOS.some(f => f.endsWith(`-${anoAtualLoop}`))) {
+            adicionarFeriadosAno(anoAtualLoop);
+        }
+
         const diaSemana = dataAtual.getDay();
         const fimSemana = (diaSemana === 0 || diaSemana === 6);
 
@@ -61,22 +68,25 @@ function calcularDataFinal() {
     }
 
     let dataAtual = new Date(inicioInput + "T00:00:00");
-
-    if (!contarInicio) {
-        dataAtual.setDate(dataAtual.getDate() + 1);
-    }
+    if (!contarInicio) dataAtual.setDate(dataAtual.getDate() + 1);
 
     let diasContados = 0;
 
     function ehFeriado(data) {
-        const dd = String(data.getDate()).padStart(2, "0");
-        const mm = String(data.getMonth() + 1).padStart(2, "0");
+        const dd = String(data.getDate()).padStart(2,"0");
+        const mm = String(data.getMonth()+1).padStart(2,"0");
         const yyyy = data.getFullYear();
         const formato = `${dd}-${mm}-${yyyy}`;
         return FERIADOS.includes(formato);
     }
 
     while (diasContados < prazoDiasUteis) {
+        // adiciona feriados do ano atual se necessário
+        const anoAtualLoop = dataAtual.getFullYear();
+        if (!FERIADOS.some(f => f.endsWith(`-${anoAtualLoop}`))) {
+            adicionarFeriadosAno(anoAtualLoop);
+        }
+
         const diaSemana = dataAtual.getDay();
         const fimSemana = (diaSemana === 0 || diaSemana === 6);
 
@@ -90,8 +100,8 @@ function calcularDataFinal() {
     }
 
     const yyyy = dataAtual.getFullYear();
-    const mm = String(dataAtual.getMonth() + 1).padStart(2, "0");
-    const dd = String(dataAtual.getDate()).padStart(2, "0");
+    const mm = String(dataAtual.getMonth() + 1).padStart(2,"0");
+    const dd = String(dataAtual.getDate()).padStart(2,"0");
     const dataFinalFormatada = `${yyyy}-${mm}-${dd}`;
 
     document.getElementById("dataFim").value = dataFinalFormatada;
@@ -99,7 +109,7 @@ function calcularDataFinal() {
 }
 
 // ---------------------------
-// Função para limpar todos os campos
+// Função para limpar campos
 function limparCampos() {
     document.getElementById("dataInicio").value = "";
     document.getElementById("prazoDiasUteis").value = "";
