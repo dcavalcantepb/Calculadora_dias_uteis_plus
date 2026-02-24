@@ -1,53 +1,56 @@
-Considerando este código da minha calculadora de dias úteis, eu gostaria de calcular um prazo em dias úteis.
-
-Num primeiro campo, o usuário insere a data inicial;
-No segundo campo, o usuário insere o prazo em dias úteis
-A calculadora informa a data fim do prazo, contando apenas os dias úteis.
-
-Faça essa estrutura em HTML primeiro, depois partiremos para o CSS e para o Javascript.
-
-<Head> <link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Dias Úteis do NPR</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<div class="container">
+    <div class="container">
+        <h2>Calculadora de Dias Úteis do NPR</h2>
 
-<h2>Calculadora de Dias Úteis do NPR</h2>
+        <!-- Data início -->
+        <label for="dataInicio">Data início:</label>
+        <input type="date" id="dataInicio">
 
-<label>Data início:</label>
-<input type="date" id="dataInicio">
+        <!-- Prazo em dias úteis -->
+        <label for="prazoDiasUteis">Prazo (em dias úteis):</label>
+        <input type="number" id="prazoDiasUteis" min="1" placeholder="Ex: 10">
 
-<label>Data fim:</label>
-<input type="date" id="dataFim">
+        <!-- Data fim -->
+        <label for="dataFim">Data fim:</label>
+        <input type="date" id="dataFim" readonly>
 
-<label class="opcao">
+        <!-- Opção de contar data inicial -->
+        <label class="opcao">
+            <input type="checkbox" id="contarInicio">
+            <span>Contar data inicial</span>
+        </label>
 
-<input type="checkbox" id="contarInicio">
+        <!-- Botões -->
+        <div class="botoes">
+            <button class="btn-calcular" onclick="calcularDiasUteisEntreDatas()">
+                Dias úteis entre datas
+            </button>
+            <button class="btn-calcular" onclick="calcularDataFinal()">
+                Calcular data final
+            </button>
+            <button class="btn-limpar" onclick="limparCampos()">
+                Limpar
+            </button>
+        </div>
 
-<span>Contar data inicial</span>
+        <!-- Resultado -->
+        <p id="resultado"></p>
+    </div>
 
-</label>
-  
-<div class="botoes">
+    <div class="footer">
+        Feito com ☕ <br> Danilo Cavalcante - 2026
+    </div>
 
-<button class="btn-calcular" onclick="calcularDiasUteis()">
-Calcular
-</button>
-
-<button class="btn-limpar" onclick="limparCampos()">
-Limpar
-</button>
-
-</div>
-
-<p id="resultado"></p>
-  
-</div>
-
-<div class="footer">
-  Feito com ☕ <br> Danilo Cavalcante - 2026
-</div>
-  
-<script src="feriados.js"></script>
-<script src="script.js"></script>
+    <script src="feriados.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
 </body>
