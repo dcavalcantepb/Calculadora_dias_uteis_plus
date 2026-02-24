@@ -1,137 +1,219 @@
-body {
-    background-color: #4682B4;
-    font-family: FreeMono, monospace;
-    color: #FFFAFA;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
+/* página */
+
+body{
+
+background-color:#4682B4;
+
+font-family:FreeMono, monospace;
+
+color:#FFFAFA;
+
+margin:0;
+
 }
 
-/* cartão central */
-.container {
-    background-color: #5a93c7;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-    width: 340px;
+
+/* wrapper vertical */
+
+.pagina{
+
+min-height:100vh;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
 }
+
+
+/* cartão */
+
+.container{
+
+background-color:#5a93c7;
+
+padding:30px;
+
+border-radius:12px;
+
+box-shadow:0 8px 25px rgba(0,0,0,0.25);
+
+width:340px;
+
+}
+
 
 /* título */
-h2 {
-    margin-top: 0;
-    text-align: center;
+
+h2{
+
+margin-top:0;
+
+text-align:center;
+
 }
+
 
 /* inputs */
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-    box-sizing: border-box;
-    font-size: 14px;
-    transition: all 0.2s ease;
+
+input{
+
+width:100%;
+
+padding:10px;
+
+margin:10px 0;
+
+border-radius:6px;
+
+border:none;
+
+outline:none;
+
+box-sizing:border-box;
+
+font-size:14px;
+
+transition:all .2s ease;
+
 }
 
-/* placeholder */
-input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+
+input:focus{
+
+box-shadow:0 0 0 2px rgba(255,255,255,0.6);
+
 }
 
-/* foco do input */
-input:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
-}
 
 /* botões */
-.botoes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
+
+.botoes{
+
+display:flex;
+
+gap:10px;
+
+margin-top:15px;
+
 }
 
-/* padrão botão */
-button {
-    flex: 1 1 100px;
-    border: none;
-    padding: 12px;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s ease;
+
+button{
+
+flex:1;
+
+border:none;
+
+padding:12px;
+
+border-radius:6px;
+
+color:white;
+
+cursor:pointer;
+
+font-weight:bold;
+
+transition:.2s;
+
 }
 
-/* calcular */
-.btn-calcular {
-    background-color: #28a745;
+
+.btn-calcular{
+
+background-color:#28a745;
+
 }
 
-/* limpar */
-.btn-limpar {
-    background-color: #dc3545;
+
+.btn-limpar{
+
+background-color:#dc3545;
+
 }
 
-/* hover */
-.btn-calcular:hover {
-    background-color: #218838;
-    transform: translateY(-1px);
+
+.btn-calcular:hover{
+
+background-color:#218838;
+
+transform:translateY(-1px);
+
 }
 
-.btn-limpar:hover {
-    background-color: #c82333;
-    transform: translateY(-1px);
+
+.btn-limpar:hover{
+
+background-color:#c82333;
+
+transform:translateY(-1px);
+
 }
 
-/* clique */
-button:active {
-    transform: translateY(1px);
-    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
+
+button:active{
+
+transform:translateY(1px);
+
+box-shadow:inset 0 3px 5px rgba(0,0,0,0.2);
+
 }
+
+
+/* checkbox */
+
+.opcao{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+margin-top:15px;
+
+cursor:pointer;
+
+}
+
+
+input[type="checkbox"]{
+
+width:auto;
+
+margin:0;
+
+}
+
 
 /* resultado */
-#resultado {
-    margin-top: 15px;
-    font-weight: bold;
-    text-align: center;
+
+#resultado{
+
+margin-top:15px;
+
+font-weight:bold;
+
+text-align:center;
+
 }
 
-/* checkbox e opção */
-.opcao {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
-    margin-top: 15px;
-    cursor: pointer;
-}
-
-.opcao span {
-    white-space: nowrap;
-}
-
-input[type="checkbox"] {
-    outline: none;
-    box-shadow: none;
-    border: none;
-}
-
-input[type="checkbox"]:focus,
-input[type="checkbox"]:focus-visible {
-    outline: none;
-    box-shadow: none;
-}
 
 /* footer */
-.footer {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #ffffff;
+
+.footer{
+
+margin-top:15px;
+
+text-align:center;
+
+font-size:.9rem;
+
+color:white;
+
 }
