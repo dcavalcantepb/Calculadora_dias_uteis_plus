@@ -1,0 +1,53 @@
+Considerando este código da minha calculadora de dias úteis, eu gostaria de calcular um prazo em dias úteis.
+
+Num primeiro campo, o usuário insere a data inicial;
+No segundo campo, o usuário insere o prazo em dias úteis
+A calculadora informa a data fim do prazo, contando apenas os dias úteis.
+
+Faça essa estrutura em HTML primeiro, depois partiremos para o CSS e para o Javascript.
+
+<Head> <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="container">
+
+<h2>Calculadora de Dias Úteis do NPR</h2>
+
+<label>Data início:</label>
+<input type="date" id="dataInicio">
+
+<label>Data fim:</label>
+<input type="date" id="dataFim">
+
+<label class="opcao">
+
+<input type="checkbox" id="contarInicio">
+
+<span>Contar data inicial</span>
+
+</label>
+  
+<div class="botoes">
+
+<button class="btn-calcular" onclick="calcularDiasUteis()">
+Calcular
+</button>
+
+<button class="btn-limpar" onclick="limparCampos()">
+Limpar
+</button>
+
+</div>
+
+<p id="resultado"></p>
+  
+</div>
+
+<div class="footer">
+  Feito com ☕ <br> Danilo Cavalcante - 2026
+</div>
+  
+<script src="feriados.js"></script>
+<script src="script.js"></script>
+</body>
