@@ -30,13 +30,7 @@ index f37b8b947bccabd7faaaea189086f8404920cdb1..0f4666a68b976b969c9c48b3bf0859bb
      const prazoDiasUteis = parseInt(document.getElementById("prazoDiasUteis").value);
 -    const contarInicio = document.getElementById("contarInicio").checked;
  
-     if (!inicioInput || isNaN(prazoDiasUteis) || prazoDiasUteis < 1) {
-         alert("Informe a data inicial e o prazo em dias úteis (maior que 0).");
-         return;
-     }
- 
-     let dataAtual = new Date(inicioInput + "T00:00:00");
--    if (!contarInicio) dataAtual.setDate(dataAtual.getDate() + 1);
+ -    if (!contarInicio) dataAtual.setDate(dataAtual.getDate() + 1);
  
      let diasContados = 0;
  
