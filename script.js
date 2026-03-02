@@ -1,133 +1,115 @@
+// ============================
+// CALCULADORA DE DIAS ÚTEIS
+// ============================
+
 // ---------------------------
-// Função para calcular a data final a partir de prazo em dias úteis
-function calcularDataFinal() {
+// Função para calcular dias úteis entre duas datas
+function calcularDiasUteisEntreDatas() {
+    const inicioInput = document.getElementById("dataInicio").value;
+    const fimInput = document.getElementById("dataFim").value;
+    const contarInicio = document.getElementById("contarInicio").checked;
 
-    const inicioInput =
-        document.getElementById("dataInicio").value;
-
-    const prazoDiasUteis =
-        parseInt(
-            document.getElementById("prazoDiasUteis").value
-        );
-
-    // validações básicas
-    if (!inicioInput) {
-        alert("Informe a data inicial.");
+    if (!inicioInput || !fimInput) {
+        alert("Informe as duas datas.");
         return;
     }
 
-    if (isNaN(prazoDiasUteis) || prazoDiasUteis <= 0) {
-        alert("Informe um prazo válido em dias úteis.");
+    let inicio = new Date(inicioInput + "T00:00:00");
+    let fim = new Date(fimInput + "T00:00:00");
+
+    if (fim <= inicio) {
+        alert("A data final deve ser posterior à inicial.");
         return;
     }
 
-    let dataAtual = new Date(inicioInput);
+    let dataAtual = new Date(inicio);
+    if (!contarInicio) dataAtual.setDate(dataAtual.getDate() + 1);
 
-    if (isNaN(dataAtual.getTime())) {
-        alert("Data inicial inválida.");
-        return;
-    }
+    let diasUteis = 0;
 
-    let diasContados = 0;
-
-    // ---------------------------
-    // verifica feriado
     function ehFeriado(data) {
-
-        const dd =
-            String(data.getDate()).padStart(2, "0");
-
-        const mm =
-            String(data.getMonth() + 1).padStart(2, "0");
-
-        const yyyy =
-            data.getFullYear();
-
-        const formato =
-            `${dd}-${mm}-${yyyy}`;
-
+        const dd = String(data.getDate()).padStart(2,"0");
+        const mm = String(data.getMonth()+1).padStart(2,"0");
+        const yyyy = data.getFullYear();
+        const formato = `${dd}-${mm}-${yyyy}`;
         return FERIADOS.includes(formato);
     }
 
-    // ---------------------------
-    // verifica dia útil
-    function ehDiaUtil(data) {
-
-        const ano = data.getFullYear();
-
-        // adiciona feriados do ano caso não existam
-        if (!FERIADOS.some(f => f.endsWith(`-${ano}`))) {
-            adicionarFeriadosAno(ano);
+    while (dataAtual <= fim) {
+        // adiciona feriados do ano atual se necessário
+        const anoAtualLoop = dataAtual.getFullYear();
+        if (!FERIADOS.some(f => f.endsWith(`-${anoAtualLoop}`))) {
+            adicionarFeriadosAno(anoAtualLoop);
         }
 
-        const diaSemana = data.getDay();
+        const diaSemana = dataAtual.getDay();
+        const fimSemana = (diaSemana === 0 || diaSemana === 6);
 
-        const fimSemana =
-            (diaSemana === 0 || diaSemana === 6);
+        if (!fimSemana && !ehFeriado(dataAtual)) {
+            diasUteis++;
+        }
 
-        return !fimSemana && !ehFeriado(data);
+        dataAtual.setDate(dataAtual.getDate() + 1);
     }
 
-    // ---------------------------
-    // começa sempre no próximo dia útil
-    let tentativaSeguranca = 0;
+    document.getElementById("resultado").innerText = `Dias úteis: ${diasUteis}`;
+}
 
-    do {
+// ---------------------------
+// Função para calcular a data final a partir de prazo em dias úteis
+function calcularDataFinal() {
+    const inicioInput = document.getElementById("dataInicio").value;
+    const prazoDiasUteis = parseInt(document.getElementById("prazoDiasUteis").value);
+    const contarInicio = document.getElementById("contarInicio").checked;
 
-        dataAtual.setDate(
-            dataAtual.getDate() + 1
-        );
+    if (!inicioInput || isNaN(prazoDiasUteis) || prazoDiasUteis < 1) {
+        alert("Informe a data inicial e o prazo em dias úteis (maior que 0).");
+        return;
+    }
 
-        tentativaSeguranca++;
+    let dataAtual = new Date(inicioInput + "T00:00:00");
+    if (!contarInicio) dataAtual.setDate(dataAtual.getDate() + 1);
 
-        // proteção contra loop infinito
-        if (tentativaSeguranca > 370) {
-            alert("Erro ao localizar próximo dia útil.");
-            return;
+    let diasContados = 0;
+
+    function ehFeriado(data) {
+        const dd = String(data.getDate()).padStart(2,"0");
+        const mm = String(data.getMonth()+1).padStart(2,"0");
+        const yyyy = data.getFullYear();
+        const formato = `${dd}-${mm}-${yyyy}`;
+        return FERIADOS.includes(formato);
+    }
+
+    while (diasContados < prazoDiasUteis) {
+        // adiciona feriados do ano atual se necessário
+        const anoAtualLoop = dataAtual.getFullYear();
+        if (!FERIADOS.some(f => f.endsWith(`-${anoAtualLoop}`))) {
+            adicionarFeriadosAno(anoAtualLoop);
         }
 
-    } while (!ehDiaUtil(dataAtual));
+        const diaSemana = dataAtual.getDay();
+        const fimSemana = (diaSemana === 0 || diaSemana === 6);
 
-
-    // ---------------------------
-    // conta dias úteis
-    while (diasContados < prazoDiasUteis) {
-
-        if (ehDiaUtil(dataAtual)) {
+        if (!fimSemana && !ehFeriado(dataAtual)) {
             diasContados++;
         }
 
         if (diasContados < prazoDiasUteis) {
-
-            dataAtual.setDate(
-                dataAtual.getDate() + 1
-            );
-
+            dataAtual.setDate(dataAtual.getDate() + 1);
         }
     }
 
-    // ---------------------------
-    // formata resultado YYYY-MM-DD
-    const yyyy =
-        dataAtual.getFullYear();
+    const yyyy = dataAtual.getFullYear();
+    const mm = String(dataAtual.getMonth() + 1).padStart(2,"0");
+    const dd = String(dataAtual.getDate()).padStart(2,"0");
+    const dataFinalFormatada = `${yyyy}-${mm}-${dd}`;
 
-    const mm =
-        String(dataAtual.getMonth() + 1)
-            .padStart(2, "0");
-
-    const dd =
-        String(dataAtual.getDate())
-            .padStart(2, "0");
-
-    const dataFinalFormatada =
-        `${yyyy}-${mm}-${dd}`;
-
-    document.getElementById("dataFim").value =
-        dataFinalFormatada;
+    document.getElementById("dataFim").value = dataFinalFormatada;
+    document.getElementById("resultado").innerText = `Data final do prazo: ${dd}/${mm}/${yyyy}`;
 }
 
 // ---------------------------
-    // Limpar os campos
+// Função para limpar campos
 function limparCampos() {
     document.getElementById("dataInicio").value = "";
     document.getElementById("prazoDiasUteis").value = "";
