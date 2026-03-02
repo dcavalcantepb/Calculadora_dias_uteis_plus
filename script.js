@@ -125,3 +125,12 @@ function calcularDataFinal() {
     document.getElementById("dataFim").value =
         dataFinalFormatada;
 }
+
+// ---------------------------
+    // Limpar os campos
+function limparCampos() {
+    document.getElementById("dataInicio").value = "";
+    document.getElementById("prazoDiasUteis").value = "";
+    document.getElementById("dataFim").value = "";
+    document.getElementById("resultado").innerText = "";
+}
