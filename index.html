@@ -18,10 +18,28 @@
 
 <h2>Calculadora de Dias Úteis do NPR</h2>
 
+<div class="tabs" role="tablist">
+<button type="button" class="tab-btn active" data-tab="dias" onclick="mudarAba('dias')">Dias úteis</button>
+<button type="button" class="tab-btn" data-tab="horas" onclick="mudarAba('horas')">Horas</button>
+</div>
+
+<div id="tab-dias" class="tab-content active">
 
 <label>Data início:</label>
-<input type="date" id="dataInicio">
-
+<div class="campo-data">
+<input
+type="text"
+id="dataInicio"
+class="input-data"
+inputmode="numeric"
+placeholder="dd/mm/aaaa"
+maxlength="10"
+autocomplete="off"
+oninput="aplicarMascaraData(event); calcularDataFinalAuto();"
+>
+<button type="button" class="btn-icone" onclick="abrirCalendario('dataInicio')" title="Escolher no calendário">📅</button>
+<input type="date" id="dataInicio_picker" class="picker-oculto" tabindex="-1" aria-hidden="true" onchange="onPickerChange('dataInicio')">
+</div>
 
 <label>Prazo (dias úteis):</label>
 <input
@@ -29,17 +47,29 @@ type="number"
 id="prazoDiasUteis"
 min="1"
 placeholder="Digite o prazo"
-oninput="calcularDataFinal()"
+oninput="calcularDataFinalAuto()"
 >
 
-
 <label>Data fim:</label>
-<input type="date" id="dataFim">
-
+<div class="campo-data">
+<input
+type="text"
+id="dataFim"
+class="input-data"
+inputmode="numeric"
+placeholder="dd/mm/aaaa"
+maxlength="10"
+autocomplete="off"
+oninput="aplicarMascaraData(event)"
+>
+<button type="button" class="btn-icone" onclick="abrirCalendario('dataFim')" title="Escolher no calendário">📅</button>
+<input type="date" id="dataFim_picker" class="picker-oculto" tabindex="-1" aria-hidden="true" onchange="onPickerChange('dataFim')">
+<button type="button" class="btn-icone" id="btnCopiarDataFim" onclick="copiarDataFim()" title="Copiar data fim">📋</button>
+</div>
 
 <label class="opcao">
 
-<input type="checkbox" id="contarInicio">
+<input type="checkbox" id="contarInicio" onchange="calcularDataFinalAuto()">
 
 <span>Contar data inicial</span>
 
@@ -69,6 +99,28 @@ Limpar
 
 </div>
 
+<div id="tab-horas" class="tab-content">
+
+<label>Hora início:</label>
+<input type="time" id="horaInicio">
+
+<label>Hora fim:</label>
+<input type="time" id="horaFim">
+
+<div class="botoes">
+
+<button class="btn-calcular" onclick="calcularPeriodoHoras()">Calcular período</button>
+
+<button class="btn-limpar" onclick="limparHoras()">Limpar</button>
+
+</div>
+
+<p id="resultadoHoras"></p>
+
+</div>
+
+</div>
+
 
 <div class="footer">
 
@@ -78,6 +130,8 @@ Danilo Cavalcante - 2026
 </div>
 
 </div>
+
+<div class="faixa-decorativa"></div>
 
 <script src="feriados.js"></script>
 <script src="script.js"></script>

@@ -2,13 +2,15 @@
 
 body{
 
-background-color:#4682B4;
+background:linear-gradient(160deg,#eef2f9 0%,#ffffff 55%,#eef2f9 100%);
 
-font-family:FreeMono, monospace;
+font-family:'Segoe UI', FreeMono, monospace;
 
-color:#FFFAFA;
+color:#243352;
 
 margin:0;
+
+min-height:100vh;
 
 }
 
@@ -27,6 +29,10 @@ justify-content:center;
 
 align-items:center;
 
+padding:24px 16px 40px;
+
+box-sizing:border-box;
+
 }
 
 
@@ -34,15 +40,17 @@ align-items:center;
 
 .container{
 
-background-color:#5a93c7;
+background-color:#ffffff;
 
 padding:30px;
 
-border-radius:12px;
+border-radius:14px;
 
-box-shadow:0 8px 25px rgba(0,0,0,0.25);
+box-shadow:0 10px 30px rgba(20,35,90,0.15);
 
 width:340px;
+
+border-top:4px solid #16215c;
 
 }
 
@@ -55,6 +63,95 @@ margin-top:0;
 
 text-align:center;
 
+color:#16215c;
+
+font-size:1.3rem;
+
+}
+
+
+/* abas */
+
+.tabs{
+
+display:flex;
+
+gap:6px;
+
+margin-bottom:16px;
+
+border-bottom:2px solid #e3e8f2;
+
+}
+
+
+.tab-btn{
+
+flex:1;
+
+background:none;
+
+border:none;
+
+padding:10px 6px;
+
+font-weight:bold;
+
+color:#7688a8;
+
+cursor:pointer;
+
+border-bottom:3px solid transparent;
+
+margin-bottom:-2px;
+
+transition:.2s;
+
+}
+
+
+.tab-btn:hover{
+
+color:#2f6fce;
+
+}
+
+
+.tab-btn.active{
+
+color:#16215c;
+
+border-bottom-color:#2f6fce;
+
+}
+
+
+.tab-content{
+
+display:none;
+
+}
+
+
+.tab-content.active{
+
+display:block;
+
+}
+
+
+/* labels */
+
+label{
+
+display:block;
+
+font-size:.85rem;
+
+color:#3a4a6b;
+
+margin-top:4px;
+
 }
 
 
@@ -66,17 +163,21 @@ width:100%;
 
 padding:10px;
 
-margin:10px 0;
+margin:6px 0 10px;
 
 border-radius:6px;
 
-border:none;
+border:1px solid #d5dcec;
 
 outline:none;
 
 box-sizing:border-box;
 
 font-size:14px;
+
+color:#243352;
+
+background-color:#f8faff;
 
 transition:all .2s ease;
 
@@ -85,12 +186,108 @@ transition:all .2s ease;
 
 input:focus{
 
-box-shadow:0 0 0 2px rgba(255,255,255,0.6);
+border-color:#2f6fce;
+
+box-shadow:0 0 0 3px rgba(47,111,206,0.2);
 
 }
 
 
-/* botões */
+/* campo de data com botões auxiliares */
+
+.campo-data{
+
+display:flex;
+
+gap:6px;
+
+align-items:flex-start;
+
+margin:6px 0 10px;
+
+}
+
+
+.campo-data .input-data{
+
+margin:0;
+
+flex:1;
+
+min-width:0;
+
+}
+
+
+.picker-oculto{
+
+position:absolute;
+
+width:1px;
+
+height:1px;
+
+opacity:0;
+
+pointer-events:none;
+
+margin:0;
+
+padding:0;
+
+}
+
+
+.btn-icone{
+
+flex:0 0 auto;
+
+border:1px solid #d5dcec;
+
+background-color:#f8faff;
+
+border-radius:6px;
+
+width:40px;
+
+height:40px;
+
+font-size:16px;
+
+cursor:pointer;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+transition:.2s;
+
+padding:0;
+
+}
+
+
+.btn-icone:hover{
+
+background-color:#e8effc;
+
+border-color:#2f6fce;
+
+}
+
+
+.btn-icone.copiado{
+
+background-color:#28a745;
+
+border-color:#28a745;
+
+}
+
+
+/* botões principais */
 
 .botoes{
 
@@ -126,21 +323,21 @@ transition:.2s;
 
 .btn-calcular{
 
-background-color:#28a745;
+background:linear-gradient(135deg,#1c4e9e,#2f6fce);
 
 }
 
 
 .btn-limpar{
 
-background-color:#dc3545;
+background:linear-gradient(135deg,#a8181f,#e2231a);
 
 }
 
 
 .btn-calcular:hover{
 
-background-color:#218838;
+filter:brightness(1.08);
 
 transform:translateY(-1px);
 
@@ -149,7 +346,7 @@ transform:translateY(-1px);
 
 .btn-limpar:hover{
 
-background-color:#c82333;
+filter:brightness(1.08);
 
 transform:translateY(-1px);
 
@@ -179,6 +376,10 @@ margin-top:15px;
 
 cursor:pointer;
 
+color:#3a4a6b;
+
+font-size:.9rem;
+
 }
 
 
@@ -193,13 +394,24 @@ margin:0;
 
 /* resultado */
 
-#resultado{
+#resultado,
+#resultadoHoras{
 
 margin-top:15px;
 
 font-weight:bold;
 
 text-align:center;
+
+color:#16215c;
+
+}
+
+
+#resultado.erro,
+#resultadoHoras.erro{
+
+color:#c0182b;
 
 }
 
@@ -208,12 +420,31 @@ text-align:center;
 
 .footer{
 
-margin-top:15px;
+margin-top:18px;
 
 text-align:center;
 
 font-size:.9rem;
 
-color:white;
+color:#5a6a8c;
+
+}
+
+
+/* faixa decorativa inspirada no material institucional */
+
+.faixa-decorativa{
+
+position:fixed;
+
+left:0;
+
+right:0;
+
+bottom:0;
+
+height:8px;
+
+background:linear-gradient(90deg,#e2231a 0%,#7a2f8a 50%,#16215c 100%);
 
 }
