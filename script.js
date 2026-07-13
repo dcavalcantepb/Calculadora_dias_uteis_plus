@@ -283,3 +283,24 @@ function mudarAba(nome) {
         conteudo.classList.toggle("active", conteudo.id === `tab-${nome}`);
     });
 }
+
+// ============================
+// TEMA CLARO / ESCURO
+// ============================
+function atualizarIconeTema(tema) {
+    const btn = document.getElementById("btnTema");
+    if (btn) btn.textContent = tema === "escuro" ? "☀️" : "🌙";
+}
+
+function aplicarTema(tema) {
+    document.documentElement.setAttribute("data-theme", tema);
+    localStorage.setItem("tema", tema);
+    atualizarIconeTema(tema);
+}
+
+function alternarTema() {
+    const atual = document.documentElement.getAttribute("data-theme") || "claro";
+    aplicarTema(atual === "escuro" ? "claro" : "escuro");
+}
+
+atualizarIconeTema(document.documentElement.getAttribute("data-theme") || "claro");

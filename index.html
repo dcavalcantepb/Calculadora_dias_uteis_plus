@@ -8,6 +8,14 @@
 
 <link rel="stylesheet" href="style.css">
 
+<script>
+(function(){
+    var temaSalvo = localStorage.getItem('tema');
+    var tema = temaSalvo || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro');
+    document.documentElement.setAttribute('data-theme', tema);
+})();
+</script>
+
 </head>
 
 <body>
@@ -15,6 +23,10 @@
 <div class="pagina">
 
 <div class="container">
+
+<div class="topo">
+<button type="button" class="btn-tema" id="btnTema" onclick="alternarTema()" title="Alternar tema claro/escuro">🌙</button>
+</div>
 
 <h2>Calculadora de Dias Úteis do NPR</h2>
 
