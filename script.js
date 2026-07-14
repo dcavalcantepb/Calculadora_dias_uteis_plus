@@ -78,6 +78,7 @@ function onPickerChange(idBase) {
 
     if (picker.value) {
         textInput.value = converterISOparaBR(picker.value);
+        calcularDiasUteisEntreDatasAuto();
         calcularDataFinalAuto();
     }
 }
@@ -104,24 +105,13 @@ function mostrarResultado(mensagem, erro = false) {
 }
 
 // ---------------------------
-// Calcula dias úteis entre duas datas
-function calcularDiasUteisEntreDatas() {
-    const inicioISO = obterDataISO("dataInicio");
-    const fimISO = obterDataISO("dataFim");
-    const contarInicio = document.getElementById("contarInicio").checked;
-
-    if (!inicioISO || !fimISO) {
-        mostrarResultado("Informe as duas datas completas (dd/mm/aaaa).", true);
-        return;
-    }
-
+// Conta os dias úteis entre duas datas (inclui o último dia informado).
+// Retorna null se a data final não for posterior à inicial.
+function contarDiasUteisEntre(inicioISO, fimISO, contarInicio) {
     let inicio = new Date(inicioISO + "T00:00:00");
     let fim = new Date(fimISO + "T00:00:00");
 
-    if (fim <= inicio) {
-        mostrarResultado("A data final deve ser posterior à inicial.", true);
-        return;
-    }
+    if (fim <= inicio) return null;
 
     let dataAtual = new Date(inicio);
     if (!contarInicio) dataAtual.setDate(dataAtual.getDate() + 1);
@@ -141,14 +131,58 @@ function calcularDiasUteisEntreDatas() {
         dataAtual.setDate(dataAtual.getDate() + 1);
     }
 
+    return diasUteis;
+}
+
+// Calcula dias úteis entre duas datas (ação explícita do botão, com mensagens de erro)
+function calcularDiasUteisEntreDatas() {
+    const inicioISO = obterDataISO("dataInicio");
+    const fimISO = obterDataISO("dataFim");
+    const contarInicio = document.getElementById("contarInicio").checked;
+
+    if (!inicioISO || !fimISO) {
+        mostrarResultado("Informe as duas datas completas (dd/mm/aaaa).", true);
+        return;
+    }
+
+    const diasUteis = contarDiasUteisEntre(inicioISO, fimISO, contarInicio);
+
+    if (diasUteis === null) {
+        mostrarResultado("A data final deve ser posterior à inicial.", true);
+        return;
+    }
+
+    mostrarResultado(`Dias úteis: ${diasUteis}`);
+}
+
+// Recalcula os dias úteis entre datas automaticamente (ex.: ao marcar/desmarcar
+// "contar data inicial"), sem mensagens de erro enquanto os campos estão incompletos.
+function calcularDiasUteisEntreDatasAuto() {
+    const inicioISO = obterDataISO("dataInicio");
+    const fimISO = obterDataISO("dataFim");
+
+    if (!inicioISO || !fimISO) return;
+
+    const contarInicio = document.getElementById("contarInicio").checked;
+    const diasUteis = contarDiasUteisEntre(inicioISO, fimISO, contarInicio);
+
+    if (diasUteis === null) return;
+
     mostrarResultado(`Dias úteis: ${diasUteis}`);
 }
 
 // ---------------------------
 // Calcula a data final a partir de um prazo em dias úteis (automático, sem travar a digitação)
 function calcularDataFinalAuto() {
+    const prazoRaw = document.getElementById("prazoDiasUteis").value.trim();
+
+    // Prazo vazio: essa calculadora não está em uso agora (o campo "Data fim"
+    // pode estar sendo preenchido manualmente para "Dias úteis entre datas").
+    // Não mexe em nada para não apagar o que o usuário já digitou.
+    if (!prazoRaw) return;
+
     const inicioISO = obterDataISO("dataInicio");
-    const prazoDiasUteis = parseInt(document.getElementById("prazoDiasUteis").value, 10);
+    const prazoDiasUteis = parseInt(prazoRaw, 10);
     const contarInicio = document.getElementById("contarInicio").checked;
 
     if (!inicioISO || isNaN(prazoDiasUteis) || prazoDiasUteis < 1) {

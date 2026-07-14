@@ -47,7 +47,7 @@ inputmode="numeric"
 placeholder="dd/mm/aaaa"
 maxlength="10"
 autocomplete="off"
-oninput="aplicarMascaraData(event); calcularDataFinalAuto();"
+oninput="aplicarMascaraData(event); calcularDiasUteisEntreDatasAuto(); calcularDataFinalAuto();"
 >
 <button type="button" class="btn-icone" onclick="abrirCalendario('dataInicio')" title="Escolher no calendário">📅</button>
 <input type="date" id="dataInicio_picker" class="picker-oculto" tabindex="-1" aria-hidden="true" onchange="onPickerChange('dataInicio')">
@@ -72,7 +72,7 @@ inputmode="numeric"
 placeholder="dd/mm/aaaa"
 maxlength="10"
 autocomplete="off"
-oninput="aplicarMascaraData(event)"
+oninput="aplicarMascaraData(event); calcularDiasUteisEntreDatasAuto();"
 >
 <button type="button" class="btn-icone" onclick="abrirCalendario('dataFim')" title="Escolher no calendário">📅</button>
 <input type="date" id="dataFim_picker" class="picker-oculto" tabindex="-1" aria-hidden="true" onchange="onPickerChange('dataFim')">
@@ -81,7 +81,7 @@ oninput="aplicarMascaraData(event)"
 
 <label class="opcao">
 
-<input type="checkbox" id="contarInicio" onchange="calcularDataFinalAuto()">
+<input type="checkbox" id="contarInicio" onchange="calcularDiasUteisEntreDatasAuto(); calcularDataFinalAuto();">
 
 <span>Contar data inicial</span>
 
