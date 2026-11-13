@@ -861,6 +861,19 @@ transition:color .3s ease;
 }
 
 
+.logo-claude{
+
+width:.95em;
+
+height:.95em;
+
+vertical-align:-0.14em;
+
+margin:0 .1em;
+
+}
+
+
 /* faixa decorativa inspirada no material institucional */
 
 .faixa-decorativa{
