@@ -33,6 +33,11 @@ const FERIADOS_FIXOS = {
     ]
 };
 
+// Feriados fixos que só passaram a valer a partir de certo ano ("dd-mm": ano inicial)
+const FERIADOS_FIXOS_DESDE = {
+    "20-11": 2024 // Consciência Negra: feriado nacional desde a Lei 14.759/2023
+};
+
 // ================================
 // 2) PONTOS FACULTATIVOS POR ANO (formato "dd-mm")
 // Preencher uma entrada nova a cada decreto publicado.
@@ -103,7 +108,10 @@ function gerarFeriadosOficiais(ano){
     const datas = [];
 
     Object.values(FERIADOS_FIXOS).forEach(lista => {
-        lista.forEach(diaMes => datas.push(dataFixa(diaMes, ano)));
+        lista.forEach(diaMes => {
+            if (ano < (FERIADOS_FIXOS_DESDE[diaMes] || 0)) return;
+            datas.push(dataFixa(diaMes, ano));
+        });
     });
 
     // Sexta-feira santa (feriado nacional móvel)
