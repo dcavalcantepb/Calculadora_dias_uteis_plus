@@ -98,19 +98,21 @@ function garantirFeriadosAno(ano) {
 
 // ---------------------------
 // Mensagens de resultado (sem alert, para não interromper a digitação)
-function mostrarResultado(mensagem, erro = false) {
+function mostrarResultado(mensagem, erro = false, aviso = "") {
     const el = document.getElementById("resultado");
     el.innerText = mensagem;
     el.classList.toggle("erro", erro);
+    document.getElementById("aviso").innerText = aviso;
 }
 
-// Acrescenta ao resultado um aviso quando o período toca anos sem decreto
+// Aviso exibido (separado do resultado) quando o período toca anos sem decreto
 // de pontos facultativos cadastrado (feriados.js usa uma estimativa nesses anos).
-function comAvisoEstimativa(mensagem, inicioISO, fimISO) {
+// Retorna "" quando não há o que avisar.
+function avisoEstimativa(inicioISO, fimISO) {
     const anos = anosSemDecreto(parseInt(inicioISO.slice(0, 4), 10), parseInt(fimISO.slice(0, 4), 10));
-    if (anos.length === 0) return mensagem;
+    if (anos.length === 0) return "";
 
-    return `${mensagem}\nPontos facultativos de ${anos.join(", ")} estimados (decreto ainda não cadastrado): o resultado pode variar em alguns dias.`;
+    return `⚠ Pontos facultativos de ${anos.join(", ")} estimados (decreto ainda não cadastrado): o resultado pode variar em alguns dias.`;
 }
 
 // ---------------------------
@@ -161,7 +163,7 @@ function calcularDiasUteisEntreDatas() {
         return;
     }
 
-    mostrarResultado(comAvisoEstimativa(`Dias úteis: ${diasUteis}`, inicioISO, fimISO));
+    mostrarResultado(`Dias úteis: ${diasUteis}`, false, avisoEstimativa(inicioISO, fimISO));
 }
 
 // Recalcula os dias úteis entre datas automaticamente (ex.: ao marcar/desmarcar
@@ -177,7 +179,7 @@ function calcularDiasUteisEntreDatasAuto() {
 
     if (diasUteis === null) return;
 
-    mostrarResultado(comAvisoEstimativa(`Dias úteis: ${diasUteis}`, inicioISO, fimISO));
+    mostrarResultado(`Dias úteis: ${diasUteis}`, false, avisoEstimativa(inicioISO, fimISO));
 }
 
 // ---------------------------
@@ -224,7 +226,7 @@ function calcularDataFinalAuto() {
     const dataFinalBR = converterISOparaBR(dataFinalISO);
 
     document.getElementById("dataFim").value = dataFinalBR;
-    mostrarResultado(comAvisoEstimativa(`Data final do prazo: ${dataFinalBR}`, inicioISO, dataFinalISO));
+    mostrarResultado(`Data final do prazo: ${dataFinalBR}`, false, avisoEstimativa(inicioISO, dataFinalISO));
 }
 
 // ---------------------------

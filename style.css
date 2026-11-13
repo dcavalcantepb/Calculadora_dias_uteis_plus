@@ -62,6 +62,8 @@
 
 --cor-erro:#c0182b;
 
+--cor-aviso:#e5101d;
+
 --cor-footer:#5a6a8c;
 
 --faixa:linear-gradient(90deg,#e2231a 0%,#7a2f8a 50%,#16215c 100%);
@@ -130,6 +132,8 @@
 --pill-vazio:#56648a;
 
 --cor-erro:#ff6b6b;
+
+--cor-aviso:#ff4d4d;
 
 --cor-footer:#7c8bb0;
 
@@ -615,6 +619,36 @@ transition:color .3s ease;
 #resultado.erro{
 
 color:var(--cor-erro);
+
+}
+
+
+/* aviso de estimativa (separado do resultado) */
+
+#aviso{
+
+margin:18px 0 0;
+
+padding-top:12px;
+
+border-top:1px solid var(--tab-borda);
+
+font-size:.78rem;
+
+font-weight:600;
+
+line-height:1.35;
+
+text-align:center;
+
+color:var(--cor-aviso);
+
+}
+
+
+#aviso:empty{
+
+display:none;
 
 }
 
