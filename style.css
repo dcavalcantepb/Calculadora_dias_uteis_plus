@@ -52,6 +52,14 @@
 
 --cor-resultado:#16215c;
 
+--bg-linha:#f3f6fd;
+
+--pill-bg:#e3ebfb;
+
+--pill-texto:#16215c;
+
+--pill-vazio:#9aa8c4;
+
 --cor-erro:#c0182b;
 
 --cor-footer:#5a6a8c;
@@ -112,6 +120,14 @@
 --btn-limpar-ate:#c22a26;
 
 --cor-resultado:#dbe4ff;
+
+--bg-linha:#1a2238;
+
+--pill-bg:#22305a;
+
+--pill-texto:#dbe4ff;
+
+--pill-vazio:#56648a;
 
 --cor-erro:#ff6b6b;
 
@@ -581,8 +597,7 @@ margin:0;
 
 /* resultado */
 
-#resultado,
-#resultadoHoras{
+#resultado{
 
 margin-top:15px;
 
@@ -597,10 +612,234 @@ transition:color .3s ease;
 }
 
 
-#resultado.erro,
-#resultadoHoras.erro{
+#resultado.erro{
 
 color:var(--cor-erro);
+
+}
+
+
+/* aba Horas: lista de períodos */
+
+.periodos-cabecalho,
+.linha-periodo{
+
+display:grid;
+
+grid-template-columns:minmax(0,1fr) 8px minmax(0,1fr) 56px 24px;
+
+gap:5px;
+
+align-items:center;
+
+}
+
+
+.periodos-cabecalho{
+
+font-size:.72rem;
+
+text-transform:uppercase;
+
+letter-spacing:.04em;
+
+color:var(--cor-label);
+
+padding:0 6px;
+
+margin-bottom:2px;
+
+}
+
+
+.periodos-cabecalho span:nth-child(4){
+
+text-align:center;
+
+}
+
+
+.lista-periodos{
+
+display:flex;
+
+flex-direction:column;
+
+gap:6px;
+
+}
+
+
+.linha-periodo{
+
+background-color:var(--bg-linha);
+
+border-radius:8px;
+
+padding:6px;
+
+transition:background-color .3s ease;
+
+}
+
+
+.linha-periodo input{
+
+margin:0;
+
+padding:7px 5px;
+
+font-size:13px;
+
+}
+
+
+.periodo-separador{
+
+text-align:center;
+
+color:var(--cor-label);
+
+font-weight:bold;
+
+}
+
+
+.periodo-resultado{
+
+text-align:center;
+
+font-size:.85rem;
+
+font-weight:bold;
+
+font-variant-numeric:tabular-nums;
+
+padding:6px 0;
+
+border-radius:999px;
+
+color:var(--pill-vazio);
+
+transition:background-color .2s ease,color .2s ease;
+
+}
+
+
+.periodo-resultado.preenchido{
+
+background-color:var(--pill-bg);
+
+color:var(--pill-texto);
+
+}
+
+
+.btn-remover{
+
+flex:none;
+
+width:24px;
+
+height:24px;
+
+padding:0;
+
+border-radius:50%;
+
+background:transparent;
+
+border:1px solid var(--borda-icone);
+
+color:var(--cor-label);
+
+font-size:15px;
+
+line-height:1;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
+.btn-remover:hover{
+
+background-color:var(--cor-erro);
+
+border-color:var(--cor-erro);
+
+color:#ffffff;
+
+}
+
+
+.lista-periodos.so-uma .btn-remover{
+
+visibility:hidden;
+
+}
+
+
+/* aba Horas: total */
+
+.total-horas{
+
+margin-top:16px;
+
+padding:14px;
+
+border-radius:10px;
+
+text-align:center;
+
+background:linear-gradient(135deg,var(--btn-calcular-de),var(--btn-calcular-ate));
+
+color:#ffffff;
+
+display:flex;
+
+flex-direction:column;
+
+gap:2px;
+
+}
+
+
+.total-rotulo{
+
+font-size:.75rem;
+
+text-transform:uppercase;
+
+letter-spacing:.08em;
+
+opacity:.85;
+
+}
+
+
+.total-valor{
+
+font-size:2rem;
+
+font-weight:bold;
+
+font-variant-numeric:tabular-nums;
+
+line-height:1.1;
+
+}
+
+
+.total-detalhe{
+
+font-size:.8rem;
+
+opacity:.85;
 
 }
 

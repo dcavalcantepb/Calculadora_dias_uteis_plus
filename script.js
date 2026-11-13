@@ -279,41 +279,125 @@ function limparCampos() {
 // ============================
 // CALCULADORA DE HORAS
 // ============================
-function calcularPeriodoHoras() {
-    const inicioVal = document.getElementById("horaInicio").value;
-    const fimVal = document.getElementById("horaFim").value;
-    const resultadoEl = document.getElementById("resultadoHoras");
-
-    if (!inicioVal || !fimVal) {
-        resultadoEl.innerText = "Informe as duas horas.";
-        resultadoEl.classList.add("erro");
-        return;
-    }
+// Minutos entre duas horas "hh:mm" (passando da meia-noite se o fim for menor que o início).
+// Retorna null se alguma das horas estiver vazia (linha incompleta é ignorada).
+function minutosDoPeriodo(inicioVal, fimVal) {
+    if (!inicioVal || !fimVal) return null;
 
     const [h1, m1] = inicioVal.split(":").map(Number);
     const [h2, m2] = fimVal.split(":").map(Number);
 
-    const minutosInicio = h1 * 60 + m1;
-    const minutosFim = h2 * 60 + m2;
-
-    let diferenca = minutosFim - minutosInicio;
+    let diferenca = (h2 * 60 + m2) - (h1 * 60 + m1);
     if (diferenca < 0) diferenca += 24 * 60;
 
-    const horas = Math.floor(diferenca / 60);
-    const minutos = diferenca % 60;
+    return diferenca;
+}
 
-    resultadoEl.classList.remove("erro");
-    resultadoEl.innerText = `Período: ${pad(horas)}:${pad(minutos)}`;
+function formatarMinutos(total) {
+    return `${pad(Math.floor(total / 60))}:${pad(total % 60)}`;
+}
+
+function criarLinhaPeriodo() {
+    const linha = document.createElement("div");
+    linha.className = "linha-periodo";
+
+    const inicio = document.createElement("input");
+    inicio.type = "time";
+    inicio.className = "periodo-inicio";
+    inicio.setAttribute("aria-label", "Hora de início");
+
+    const separador = document.createElement("span");
+    separador.className = "periodo-separador";
+    separador.textContent = "–";
+
+    const fim = document.createElement("input");
+    fim.type = "time";
+    fim.className = "periodo-fim";
+    fim.setAttribute("aria-label", "Hora de fim");
+
+    const resultado = document.createElement("span");
+    resultado.className = "periodo-resultado";
+    resultado.textContent = "—";
+
+    const remover = document.createElement("button");
+    remover.type = "button";
+    remover.className = "btn-remover";
+    remover.title = "Remover período";
+    remover.textContent = "×";
+    remover.addEventListener("click", () => removerPeriodo(linha));
+
+    inicio.addEventListener("input", recalcularHoras);
+    fim.addEventListener("input", recalcularHoras);
+
+    linha.append(inicio, separador, fim, resultado, remover);
+    return linha;
+}
+
+function adicionarPeriodo(focar = true) {
+    const lista = document.getElementById("listaPeriodos");
+    const linha = criarLinhaPeriodo();
+    lista.appendChild(linha);
+    recalcularHoras();
+    if (focar) linha.querySelector(".periodo-inicio").focus();
+}
+
+function removerPeriodo(linha) {
+    linha.remove();
+    if (!document.getElementById("listaPeriodos").children.length) {
+        adicionarPeriodo(false);
+        return;
+    }
+    recalcularHoras();
+}
+
+// Recalcula o resultado de cada linha e o total. Linhas incompletas são ignoradas.
+function recalcularHoras() {
+    const lista = document.getElementById("listaPeriodos");
+    const linhas = Array.from(lista.children);
+
+    let totalMinutos = 0;
+    let completas = 0;
+
+    linhas.forEach(linha => {
+        const minutos = minutosDoPeriodo(
+            linha.querySelector(".periodo-inicio").value,
+            linha.querySelector(".periodo-fim").value
+        );
+        const resultado = linha.querySelector(".periodo-resultado");
+
+        if (minutos === null) {
+            resultado.textContent = "—";
+            resultado.classList.remove("preenchido");
+            return;
+        }
+
+        resultado.textContent = formatarMinutos(minutos);
+        resultado.classList.add("preenchido");
+        totalMinutos += minutos;
+        completas++;
+    });
+
+    lista.classList.toggle("so-uma", linhas.length === 1);
+
+    document.getElementById("totalHorasValor").textContent = formatarMinutos(totalMinutos);
+
+    const ignoradas = linhas.length - completas;
+    let detalhe = "Preencha início e fim";
+    if (completas > 0) {
+        detalhe = `${completas} ${completas === 1 ? "período somado" : "períodos somados"}`;
+        if (ignoradas > 0) {
+            detalhe += ` · ${ignoradas} ${ignoradas === 1 ? "incompleto ignorado" : "incompletos ignorados"}`;
+        }
+    }
+    document.getElementById("totalHorasDetalhe").textContent = detalhe;
 }
 
 function limparHoras() {
-    document.getElementById("horaInicio").value = "";
-    document.getElementById("horaFim").value = "";
-
-    const resultadoEl = document.getElementById("resultadoHoras");
-    resultadoEl.innerText = "";
-    resultadoEl.classList.remove("erro");
+    document.getElementById("listaPeriodos").innerHTML = "";
+    adicionarPeriodo(false);
 }
+
+adicionarPeriodo(false);
 
 // ============================
 // ABAS

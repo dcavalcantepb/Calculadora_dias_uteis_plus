@@ -118,21 +118,29 @@ Limpar
 
 <div id="tab-horas" class="tab-content">
 
-<label>Hora início:</label>
-<input type="time" id="horaInicio">
+<div class="periodos-cabecalho" aria-hidden="true">
+<span>Início</span>
+<span></span>
+<span>Fim</span>
+<span>Período</span>
+<span></span>
+</div>
 
-<label>Hora fim:</label>
-<input type="time" id="horaFim">
+<div id="listaPeriodos" class="lista-periodos"></div>
 
 <div class="botoes">
 
-<button class="btn-calcular" onclick="calcularPeriodoHoras()">Calcular período</button>
+<button type="button" class="btn-calcular" onclick="adicionarPeriodo()">+ Período</button>
 
-<button class="btn-limpar" onclick="limparHoras()">Limpar</button>
+<button type="button" class="btn-limpar" onclick="limparHoras()">Limpar</button>
 
 </div>
 
-<p id="resultadoHoras"></p>
+<div class="total-horas">
+<span class="total-rotulo">Total</span>
+<span class="total-valor" id="totalHorasValor">00:00</span>
+<span class="total-detalhe" id="totalHorasDetalhe">Preencha início e fim</span>
+</div>
 
 </div>
 
