@@ -104,6 +104,15 @@ function mostrarResultado(mensagem, erro = false) {
     el.classList.toggle("erro", erro);
 }
 
+// Acrescenta ao resultado um aviso quando o período toca anos sem decreto
+// de pontos facultativos cadastrado (feriados.js usa uma estimativa nesses anos).
+function comAvisoEstimativa(mensagem, inicioISO, fimISO) {
+    const anos = anosSemDecreto(parseInt(inicioISO.slice(0, 4), 10), parseInt(fimISO.slice(0, 4), 10));
+    if (anos.length === 0) return mensagem;
+
+    return `${mensagem}\nPontos facultativos de ${anos.join(", ")} estimados (decreto ainda não cadastrado): o resultado pode variar em alguns dias.`;
+}
+
 // ---------------------------
 // Conta os dias úteis entre duas datas (inclui o último dia informado).
 // Retorna null se a data final não for posterior à inicial.
@@ -152,7 +161,7 @@ function calcularDiasUteisEntreDatas() {
         return;
     }
 
-    mostrarResultado(`Dias úteis: ${diasUteis}`);
+    mostrarResultado(comAvisoEstimativa(`Dias úteis: ${diasUteis}`, inicioISO, fimISO));
 }
 
 // Recalcula os dias úteis entre datas automaticamente (ex.: ao marcar/desmarcar
@@ -168,7 +177,7 @@ function calcularDiasUteisEntreDatasAuto() {
 
     if (diasUteis === null) return;
 
-    mostrarResultado(`Dias úteis: ${diasUteis}`);
+    mostrarResultado(comAvisoEstimativa(`Dias úteis: ${diasUteis}`, inicioISO, fimISO));
 }
 
 // ---------------------------
@@ -215,7 +224,7 @@ function calcularDataFinalAuto() {
     const dataFinalBR = converterISOparaBR(dataFinalISO);
 
     document.getElementById("dataFim").value = dataFinalBR;
-    mostrarResultado(`Data final do prazo: ${dataFinalBR}`);
+    mostrarResultado(comAvisoEstimativa(`Data final do prazo: ${dataFinalBR}`, inicioISO, dataFinalISO));
 }
 
 // ---------------------------

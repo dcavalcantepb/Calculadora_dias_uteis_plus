@@ -2,21 +2,57 @@
 // CALENDÁRIO OFICIAL MG + BH
 // Feriados automáticos
 // ================================
+//
+// Dois blocos independentes:
+//   1) FERIADOS_FIXOS ........ feriados de data fixa (nacionais, estaduais, municipais)
+//   2) PONTOS_FACULTATIVOS ... decreto oficial de cada ano (publicado no Diário Oficial)
+//
+// Anos sem decreto cadastrado usam uma ESTIMATIVA por regra (ver estimarPontosFacultativos).
 
-// Pontos facultativos MG (atualizar todo ano)
-const PONTOS_FACULTATIVOS_MG = [
-    "02-01", // pós confraternização universal
-    "16-02", // Carnaval segunda
-    "17-02", // Carnaval terça
-    "18-02", // quarta cinzas
-    "02-04", // quinta santa
-    "20-04", // véspera Tiradentes
-    "05-06", // pós corpus christi
-    "30-10", // dia servidor público
-    "07-12", // Imaculada Conceição BH (ponto)
-    "24-12", // véspera natal
-    "31-12"  // véspera ano novo
-];
+// ================================
+// 1) FERIADOS FIXOS (formato "dd-mm")
+// ================================
+const FERIADOS_FIXOS = {
+    nacionais: [
+        "01-01", // Confraternização Universal
+        "21-04", // Tiradentes
+        "01-05", // Dia do Trabalho
+        "07-09", // Independência
+        "12-10", // Nossa Senhora Aparecida
+        "02-11", // Finados
+        "15-11", // Proclamação da República
+        "20-11", // Consciência Negra
+        "25-12"  // Natal
+    ],
+    estaduais: [
+        // MG: sem feriado estadual de data fixa além dos nacionais
+    ],
+    municipais: [
+        "15-08", // Assunção de N. Sra. (BH)
+        "08-12"  // Imaculada Conceição (BH)
+    ]
+};
+
+// ================================
+// 2) PONTOS FACULTATIVOS POR ANO (formato "dd-mm")
+// Preencher uma entrada nova a cada decreto publicado.
+// ================================
+const PONTOS_FACULTATIVOS = {
+    2026: [
+        "02-01", // pós confraternização universal
+        "16-02", // Carnaval segunda
+        "17-02", // Carnaval terça
+        "18-02", // quarta de cinzas
+        "02-04", // quinta santa
+        "20-04", // véspera Tiradentes
+        "04-06", // Corpus Christi
+        "05-06", // pós Corpus Christi
+        "30-10", // dia do servidor público
+        "07-12", // véspera Imaculada Conceição (BH)
+        "24-12", // véspera Natal
+        "31-12"  // véspera Ano Novo
+    ]
+};
 
 // ================================
 // Funções auxiliares
@@ -26,6 +62,17 @@ function formatarData(data){
     const mm = String(data.getMonth()+1).padStart(2,"0");
     const yyyy = data.getFullYear();
     return `${dd}-${mm}-${yyyy}`;
+}
+
+function somarDias(data, dias){
+    const nova = new Date(data);
+    nova.setDate(nova.getDate() + dias);
+    return nova;
+}
+
+function dataFixa(diaMes, ano){
+    const [dd, mm] = diaMes.split("-");
+    return new Date(ano, parseInt(mm, 10) - 1, parseInt(dd, 10));
 }
 
 // ================================
@@ -50,56 +97,73 @@ function calcularPascoa(ano){
 }
 
 // ================================
-// Gera feriados de um determinado ano
+// Feriados de um ano (fixos + móveis oficiais)
 // ================================
-function gerarFeriados(ano){
-    let feriados = [];
+function gerarFeriadosOficiais(ano){
+    const datas = [];
 
-    // Feriados nacionais fixos
-    feriados.push(
-        `01-01-${ano}`, `21-04-${ano}`, `01-05-${ano}`,
-        `07-09-${ano}`, `12-10-${ano}`, `02-11-${ano}`,
-        `15-11-${ano}`, `20-11-${ano}`, `25-12-${ano}`
-    );
-
-    // Municipais BH fixos
-    feriados.push(`15-08-${ano}`, `08-12-${ano}`);
-
-    // Móveis via Páscoa
-    const pascoa = calcularPascoa(ano);
-
-    // Carnaval segunda
-    let carnavalSeg = new Date(pascoa);
-    carnavalSeg.setDate(pascoa.getDate()-48);
-    feriados.push(formatarData(carnavalSeg));
-
-    // Carnaval terça
-    let carnavalTer = new Date(pascoa);
-    carnavalTer.setDate(pascoa.getDate()-47);
-    feriados.push(formatarData(carnavalTer));
-
-    // Quarta cinzas
-    let cinzas = new Date(pascoa);
-    cinzas.setDate(pascoa.getDate()-46);
-    feriados.push(formatarData(cinzas));
-
-    // Sexta santa
-    let sextaSanta = new Date(pascoa);
-    sextaSanta.setDate(pascoa.getDate()-2);
-    feriados.push(formatarData(sextaSanta));
-
-    // Corpus Christi
-    let corpus = new Date(pascoa);
-    corpus.setDate(pascoa.getDate()+60);
-    feriados.push(formatarData(corpus));
-
-    // Adiciona pontos facultativos (com ano atual)
-    PONTOS_FACULTATIVOS_MG.forEach(diaMes => {
-        const [dd, mm] = diaMes.split("-");
-        feriados.push(`${dd}-${mm}-${ano}`);
+    Object.values(FERIADOS_FIXOS).forEach(lista => {
+        lista.forEach(diaMes => datas.push(dataFixa(diaMes, ano)));
     });
 
-    return feriados;
+    // Sexta-feira santa (feriado nacional móvel)
+    datas.push(somarDias(calcularPascoa(ano), -2));
+
+    return datas;
+}
+
+// ================================
+// Estimativa de pontos facultativos para anos SEM decreto cadastrado
+// Conservadora: só o que se repete todo ano nos decretos anteriores.
+//   - Carnaval (seg/ter/cinzas), quinta santa e Corpus Christi: seguem a Páscoa
+//   - 24/12 e 31/12: véspera de Natal e de Ano Novo
+// Não estima emendas, dia do servidor nem pós-feriados (variam a cada decreto).
+// ================================
+function estimarPontosFacultativos(ano){
+    const pascoa = calcularPascoa(ano);
+
+    return [
+        somarDias(pascoa, -48), // Carnaval segunda
+        somarDias(pascoa, -47), // Carnaval terça
+        somarDias(pascoa, -46), // quarta de cinzas
+        somarDias(pascoa, -3),  // quinta santa
+        somarDias(pascoa, 60),  // Corpus Christi
+        dataFixa("24-12", ano), // véspera Natal
+        dataFixa("31-12", ano)  // véspera Ano Novo
+    ];
+}
+
+// Há decreto cadastrado para o ano?
+function temDecretoPontosFacultativos(ano){
+    return Object.prototype.hasOwnProperty.call(PONTOS_FACULTATIVOS, ano);
+}
+
+function gerarPontosFacultativos(ano){
+    if (temDecretoPontosFacultativos(ano)){
+        return PONTOS_FACULTATIVOS[ano].map(diaMes => dataFixa(diaMes, ano));
+    }
+    return estimarPontosFacultativos(ano);
+}
+
+// ================================
+// Gera todos os dias não úteis de um determinado ano
+// ================================
+function gerarFeriados(ano){
+    return [
+        ...gerarFeriadosOficiais(ano),
+        ...gerarPontosFacultativos(ano)
+    ].map(formatarData);
+}
+
+// ================================
+// Anos do intervalo que usam estimativa (sem decreto cadastrado)
+// ================================
+function anosSemDecreto(anoInicio, anoFim){
+    const anos = [];
+    for (let ano = anoInicio; ano <= anoFim; ano++){
+        if (!temDecretoPontosFacultativos(ano)) anos.push(ano);
+    }
+    return anos;
 }
 
 // ================================
