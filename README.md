@@ -27,7 +27,9 @@ Quando o período calculado toca um ano estimado, o resultado mostra um aviso (n
 
 ## Cadastrar o decreto de um novo ano
 
-O decreto costuma sair perto de dezembro, para o ano seguinte.
+O calendário de feriados e pontos facultativos das repartições estaduais é publicado no Diário Oficial pela Secretaria de Estado de Governo (divulgado também na Agência Minas), **sem data fixa**: o de 2026 saiu em 02/12/2025, mas o de 2025 só saiu em 08/01/2025. Verifique em dezembro e, se ainda não tiver saído, de novo em janeiro.
+
+O dia do servidor também pode ser antecipado ou adiado (em 2025 foi para 27/10, seguindo o Governo Federal), então use sempre as datas do calendário publicado.
 
 1. Abra [feriados.js](feriados.js) e localize `PONTOS_FACULTATIVOS`.
 2. Acrescente uma entrada para o ano, no formato `"dd-mm"`, listando **todos** os pontos facultativos do decreto, inclusive Carnaval, Quinta Santa e Corpus Christi. Ao cadastrar o ano, a estimativa deixa de ser usada para ele:
